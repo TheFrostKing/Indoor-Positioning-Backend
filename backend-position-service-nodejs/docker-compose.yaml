@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo-data:/data/db
+
+  backend-service:
+    build: .
+    container_name: backend-service
+    ports:
+      - "5000:5000"
+    environment:
+      MONGO_URI: mongodb://root:password@mongo:27017/position_service?authSource=admin
+      MQTT_BROKER_URL: mqtt://mqtt-public.smartindustries.duckdns.org
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+    command: ["sh", "-c", "npx ts-node seed.ts && npm start"]
+
+  frontend:
+      build:
+        context: ../../Frontend/Dashboard/Product
+      container_name: frontend
+      ports:
+        - "3000:3000" # Map React app's port 80 in container to 3000 on host
+
+volumes:
+  mongo-data:

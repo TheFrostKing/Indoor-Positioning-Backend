@@ -1,0 +1,39 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title C4 Diagram for Backend System
+
+' Context Diagram
+LAYOUT_TOP_DOWN
+Person_EndUser(end_user, "End User", "Uses APIs to interact with devices and data")
+System(mqtt_broker, "MQTT Broker", "External System", "Handles device communication")
+System_Boundary(backend_system, "Backend System") {
+    Container(backend_service, "Backend Service", "Node.js", "Manages tags, beacons, and device statuses")
+    ContainerDb(mongodb, "MongoDB", "Database", "Stores tags, beacons, and whitelist data")
+    Container(parser_service, "Parser Service", "Node.js", "Parses incoming MQTT messages")
+    Container(mqtt_service, "MQTT Service", "Node.js", "Handles MQTT communications and forwards data")
+}
+
+Rel(end_user, backend_service, "Uses REST APIs for CRUD operations")
+Rel(mqtt_broker, mqtt_service, "Sends MQTT messages")
+Rel(mqtt_service, parser_service, "Passes MQTT data for parsing")
+Rel(parser_service, backend_service, "Sends parsed data via HTTP")
+Rel(backend_service, mongodb, "Reads/Writes tags and beacons")
+
+' Container Diagram
+Container_Boundary(backend_service_components, "Backend Service") {
+    Component(api_gateway, "API Gateway", "Express.js", "Handles API requests and routes to controllers")
+    Component(tag_controller, "Tag Controller", "Node.js", "Handles CRUD operations for tags")
+    Component(beacon_controller, "Beacon Controller", "Node.js", "Handles CRUD operations for beacons")
+    Component(device_status_service, "Device Status Service", "Node.js", "Manages and tracks device statuses")
+    Component(whitelist_service, "Whitelist Service", "Node.js", "Manages whitelist updates and synchronization")
+}
+
+Rel(api_gateway, tag_controller, "Routes tag-related requests")
+Rel(api_gateway, beacon_controller, "Routes beacon-related requests")
+Rel(api_gateway, device_status_service, "Routes device status requests")
+Rel(api_gateway, whitelist_service, "Routes whitelist management requests")
+Rel(backend_service, mongodb, "Stores and retrieves data")
+@enduml
