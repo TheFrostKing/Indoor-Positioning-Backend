@@ -4,11 +4,12 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 title C4 Diagram for Backend System
+LAYOUT_TOP_DOWN()
 
-' Context Diagram
-LAYOUT_TOP_DOWN
-Person_EndUser(end_user, "End User", "Uses APIs to interact with devices and data")
+' ===== Context =====
+Person(end_user, "End User", "Uses APIs to interact with devices and data")
 System(mqtt_broker, "MQTT Broker", "External System", "Handles device communication")
+
 System_Boundary(backend_system, "Backend System") {
     Container(backend_service, "Backend Service", "Node.js", "Manages tags, beacons, and device statuses")
     ContainerDb(mongodb, "MongoDB", "Database", "Stores tags, beacons, and whitelist data")
@@ -16,13 +17,13 @@ System_Boundary(backend_system, "Backend System") {
     Container(mqtt_service, "MQTT Service", "Node.js", "Handles MQTT communications and forwards data")
 }
 
-Rel(end_user, backend_service, "Uses REST APIs for CRUD operations")
-Rel(mqtt_broker, mqtt_service, "Sends MQTT messages")
-Rel(mqtt_service, parser_service, "Passes MQTT data for parsing")
-Rel(parser_service, backend_service, "Sends parsed data via HTTP")
-Rel(backend_service, mongodb, "Reads/Writes tags and beacons")
+Rel(end_user, backend_service, "Uses REST APIs for CRUD operations", "HTTPS/JSON")
+Rel(mqtt_broker, mqtt_service, "Sends MQTT messages", "MQTT")
+Rel(mqtt_service, parser_service, "Passes MQTT data for parsing", "Internal")
+Rel(parser_service, backend_service, "Sends parsed data via HTTP", "HTTP/JSON")
+Rel(backend_service, mongodb, "Reads/Writes tags and beacons", "MongoDB wire protocol")
 
-' Container Diagram
+' ===== Containers / Components inside Backend Service =====
 Container_Boundary(backend_service_components, "Backend Service") {
     Component(api_gateway, "API Gateway", "Express.js", "Handles API requests and routes to controllers")
     Component(tag_controller, "Tag Controller", "Node.js", "Handles CRUD operations for tags")
