@@ -1,6 +1,8 @@
 # 📡 Positioning Service Backend (Node.js + Express + MongoDB)
 
-A production-ready **IoT positioning backend** that talks to hardware **gateways**, manages **whitelists** for **tags** and **beacons**, ingests **RSSI** measurements, and computes **positions via trilateration**. It includes **Swagger/OpenAPI docs** and MongoDB **Mongoose** models for Beacons and Devices.
+An **IoT positioning backend** that talks to hardware **gateways**, manages **whitelists** for **tags** and **beacons**, ingests **RSSI** measurements, and computes **positions via trilateration**. It includes **Swagger/OpenAPI docs** and MongoDB **Mongoose** models for Beacons and Devices. <br>
+**Note:** This project provides the backend only. A separate frontend (developed by another team member) is required to interact with it via UI.
+
 
 > This repository showcases backend engineering for real-world location systems: device control, signal processing, floor-aware trilateration, and clean API documentation.
 
