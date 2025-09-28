@@ -16,6 +16,10 @@ A production-ready **IoT positioning backend** that talks to hardware **gateways
 - **Mongoose models**: `Beacon`, `Device`, `DeviceAirSensing` (with explicit Mongo collections).
 - **Configurable**: `.env` for DB, gateway, and algorithm parameters.
 - **Container-ready**: Dockerfile + optional `docker-compose.yml`.
+  
+  # C4 Diagram
+ <img width="1611" height="1262" alt="C4 diagram project" src="https://github.com/user-attachments/assets/6007c33e-da37-48dc-963f-4bfb4ee29958" />
+
 
 ---
 
@@ -24,7 +28,6 @@ A production-ready **IoT positioning backend** that talks to hardware **gateways
 - **Node.js** + **Express**
 - **MongoDB** with **Mongoose**
 - **Swagger**: `swagger-jsdoc` + `swagger-ui-express`
-- **Validation**: (zod/joi recommended)
 - **Testing**: Jest + Supertest (optional)
 - **Container**: Docker
 - **Lint/Format**: ESLint + Prettier
